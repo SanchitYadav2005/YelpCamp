@@ -1,0 +1,26 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "On this website you can find and rate camp gorunds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanchitYadav2005/YelpCamp.git"
+  },
+  "keywords": [
+    "yelpcamp"
+  ],
+  "author": "Sanchit Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SanchitYadav2005/YelpCamp/issues"
+  },
+  "homepage": "https://github.com/SanchitYadav2005/YelpCamp#readme",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1"
+  }
+}
