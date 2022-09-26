@@ -43,8 +43,8 @@ app.get('/campgrounds/:id/delete', async (req,res)=>{
     const campground = await Campground.findByIdAndDelete(req.params.id);
     res.redirect('/campgrounds');
 });
-app.put('/campground/:id/edit', async (req,res)=>{
-    const campground = await Campground.findByIdAndUpdate(req.params.id, {runvalidetors: true, new: true});
+app.get('/campgrounds/:id/edit', async (req,res)=>{
+    const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/edit', {campground})
 })
 
