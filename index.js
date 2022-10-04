@@ -6,7 +6,7 @@ const ejs = require('ejs');
 const mongoose = require('mongoose');
 const Campground = require('./models/campgrounds');
 const method_override = require("method-override");
-const { find } = require("./models/campgrounds"); 
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -15,13 +15,14 @@ db.on("error", console.error.bind(console, "Connection error:"));
 db.once('open', ()=>{
     console.log("Database connected");
 });
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({extended:true}));
 app.use(method_override('_method'))
 
 app.get('/', (req,res)=>{
-    res.render('home')
+    res.render('home');
 });
 
 app.get('/campgrounds', async (req,res)=>{
