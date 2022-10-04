@@ -6,7 +6,7 @@ const ejs = require('ejs');
 const mongoose = require('mongoose');
 const Campground = require('./models/campgrounds');
 const method_override = require("method-override");
-const { find } = require("./models/campgrounds");
+const { find } = require("./models/campgrounds"); 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
