@@ -17,9 +17,10 @@
                 <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
                     <a href="/campgrounds/<%= campground._id %>/delete" class="btn btn-danger">Delete</a>
                 </form>
+                <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
             </div>
             <div class="card-footer text-muted">
-                <% const date = Date.now() %>
+                <% const date =  Date.now() %>
                 <%= date %>  
             </div>
         </div>
