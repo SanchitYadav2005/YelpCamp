@@ -5,7 +5,7 @@
         <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="title]"    
+                <input class="form-control" type="text" id="title" name="title"    
                     value="<%=campground.title %>">
             </div>
             <div class="mb-3">
@@ -23,14 +23,14 @@
                 <div class="input-group">
                     <span class="input-group-text" id="price-label">$</span>
                     <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                        aria-describedby="price-label" name="campground[price]" value="<%=campground.price %>">
+                        aria-describedby="price-label" name="price" value="<%=campground.price %>">
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="description"
-                    name="campground[description]"><%= campground.description%></textarea>
+                    name="price"><%= campground.description%></textarea>
             </div>
             <div class="mb-3">
                 <button class="btn btn-info">Update Campground</button>
