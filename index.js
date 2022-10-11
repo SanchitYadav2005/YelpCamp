@@ -9,6 +9,7 @@ const Campground = require('./models/campgrounds');
 const method_override = require("method-override");
 const ExpressError = require("./utils/ExpressError");
 const catchAsync = require("./utils/catchAsync");
+const Joi = require('joi');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
@@ -37,29 +38,41 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 });
 app.post('/campgrounds', catchAsync(async (req, res) => {
+    const campgroundSchema = Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+        image: Joi.string().required(),
+        description: Joi.string().required(),
+        location: Joi.string().required()
+    });
+    const {error} = campgroundSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 404);
+    }
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
 }));
-app.get('/campgrounds/:id', catchAsync( async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id)
     res.render('campgrounds/show', { campground });
 }));
-app.get('/campgrounds/:id/delete',catchAsync( async (req, res) => {
+app.get('/campgrounds/:id/delete', catchAsync(async (req, res) => {
     const campground = await Campground.findByIdAndDelete(req.params.id);
     res.redirect('/campgrounds');
 }));
-app.get('/campgrounds/:id/edit', catchAsync (async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/edit', { campground })
 }));
-app.put('/campgrounds/:id', catchAsync (async (req, res) => {
+app.put('/campgrounds/:id', catchAsync(async (req, res) => {
     const findAndUpdateCampground = await Campground.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true });
     await findAndUpdateCampground.save();
     res.redirect(`/campgrounds/${findAndUpdateCampground._id}`);
 }));
 
-app.all('*', (req,res, next)=>{
+app.all('*', (req, res, next) => {
     next(new ExpressError("ERROR!!!!!!", 404))
 });
 
