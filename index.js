@@ -59,8 +59,14 @@ app.put('/campgrounds/:id', catchAsync (async (req, res) => {
     res.redirect(`/campgrounds/${findAndUpdateCampground._id}`);
 }));
 
+app.all('*', (req,res, next)=>{
+    next(new ExpressError("ERROR!!!!!!", 404))
+});
+
 app.use((err, req, res, next) => {
-    res.send("oh boy error!!");
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+    res.status(statusCode).render('error', { err })
 })
 
 app.listen(port, (err) => {
