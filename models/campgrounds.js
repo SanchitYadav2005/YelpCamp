@@ -6,7 +6,16 @@ const CampgroundSchem = new Schema({
     price: Number,
     image:String,
     description: String,
-    location: String
+    location: String,
+    // refrenceing campground model to review model to attach every review to its campgorund and user.
+    review: [
+        {
+            // type will be set to objectid.
+            type: Schema.Types.ObjectId,
+            // setting the reference to Review model"
+            ref: 'Review'
+        }
+    ]
 });
 
 module.exports = mongoose.model('Campground', CampgroundSchem);
