@@ -1,3 +1,4 @@
+//requireing express.
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -9,14 +10,16 @@ const Campground = require('./models/campgrounds');
 const method_override = require("method-override");
 const ExpressError = require("./utils/ExpressError");
 const catchAsync = require("./utils/catchAsync");
-const {campgroundSchema} = require('./models/campgrounds');
+const {campgroundSchema, reviewSchema} = require('./models/campgrounds');
 const Review = require('./models/reviews');
-const { reverse } = require("dns");
 
 
+// connecting to mongodb server.
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
+// assigning the connection to its own varable.
 const db = mongoose.connection;
+// setting is up for error handling
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once('open', () => {
     console.log("Database connected");
@@ -38,6 +41,17 @@ const validateCampground = (req, res, next) => {
         next();
     }
 }
+
+const validateReview = (req, res, next) =>{
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 app.get('/', (req, res) => {
     res.render('home');
 });
@@ -72,8 +86,8 @@ app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${findAndUpdateCampground._id}`);
 }));
 
-//creating route for reveiws 
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+//creating route for reveiws
+app.post('/campgrounds/:id/reviews', validateReview ,catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     campground.review.push(review);
