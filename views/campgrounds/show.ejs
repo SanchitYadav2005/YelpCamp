@@ -28,11 +28,11 @@
         <form action="/campgrounds/<%= campground._id %>/reviews  " method="POST" novalidate>
             <div class="mb-3">
                 <label class="form-label" for="rating">Rating</label>
-                <input type="range" class="form-range" id="rating" name="review[ratig]" min="0" max="5" required>
+                <input type="range" class="form-range" id="rating" name="review[rating]" min="0" max="5" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="review">Review</label>
-                <textarea name="review[bdoy] id="review" cols="30" rows="3" class="form-control" required></textarea>
+                <textarea name="review[body] id="review" cols="30" rows="3" class="form-control" required></textarea>
             </div>
             <div class="valid-feedback">
                 Looks good!
