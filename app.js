@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const path = require("path");
-const ejs = require('ejs');
 const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose');
 const Campground = require('./models/campgrounds');
@@ -12,10 +11,11 @@ const ExpressError = require("./utils/ExpressError");
 const catchAsync = require("./utils/catchAsync");
 const {campgroundSchema, reviewSchema} = require('./models/campgrounds');
 const Review = require('./models/reviews');
+const { request } = require("express");
 
 
 // connecting to mongodb server.
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+mongoose.connect('mongodb://localhost:27017/yelp-camp')
 
 // assigning the connection to its own varable.
 const db = mongoose.connection;
@@ -28,8 +28,11 @@ db.once('open', () => {
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.urlencoded({ extended: true }));
-app.use(method_override('_method'))
+
+app.use(express.urlencoded({extended:true}))
+app.use(method_override('_method'));
+
+
 
 
 const validateCampground = (req, res, next) => {
@@ -42,13 +45,14 @@ const validateCampground = (req, res, next) => {
     }
 }
 
-const validateReview = (req, res, next) =>{
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
+const validateReview = (req,res,next)=>{
+    const {error} = reviewSchema.validate(req.body);
+    console.log(error);
+    if(error){
+        const msg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    }else{
+        next()
     }
 }
 
@@ -81,14 +85,16 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     res.render('campgrounds/edit', { campground })
 }));
 app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
-    const findAndUpdateCampground = await Campground.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true });
+    const {id} = req.params;
+    const findAndUpdateCampground = await Campground.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
     await findAndUpdateCampground.save();
     res.redirect(`/campgrounds/${findAndUpdateCampground._id}`);
 }));
 
 //creating route for reveiws
 app.post('/campgrounds/:id/reviews', validateReview ,catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id);
+    const {id} = req.params;
+    const campground = await Campground.findById(id);
     const review = new Review(req.body.review);
     campground.review.push(review);
     await review.save();
