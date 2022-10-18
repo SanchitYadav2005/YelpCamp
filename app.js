@@ -111,6 +111,7 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res)
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
 }))
+app.delete('/campgrounds/:id/reveiws/:reveiwsId')
 
 
 // universal route for errors.
