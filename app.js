@@ -8,6 +8,7 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const Campground = require('./models/campgrounds');
 const Review = require('./models/reviews');
+const reviews = require('./models/reviews');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -111,7 +112,12 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res)
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
 }))
-app.delete('/campgrounds/:id/reveiws/:reveiwsId')
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async(req,res)=>{
+    const {id, reviewId} = req.params;
+    await Campground.findByIdAndUpdate(id, {$pull: {review: reviewId}})
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+}))
 
 
 // universal route for errors.
