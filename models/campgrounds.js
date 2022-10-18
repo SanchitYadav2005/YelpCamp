@@ -23,7 +23,7 @@ CampgroundSchem.post('findOneAndDelete', async(doc)=>{
     if(doc){
         await Review.deleteMany({
             _id: {
-                $in: doc.reviews
+                $in: doc.review
             }
         })
     }
