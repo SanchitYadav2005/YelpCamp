@@ -75,6 +75,7 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
 // hitting the route for getting the campground by its id that is assigned by mongodb.
 app.get('/campgrounds/:id', catchAsync(async (req, res,) => {
     // finding the campground by its id.
+    //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
     const campground = await Campground.findById(req.params.id).populate('review')
     res.render('campgrounds/show', { campground });
 }));
