@@ -9,6 +9,7 @@ const Campground = require('../models/campgrounds');
 
 
 
+
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
     if (error) {
@@ -41,6 +42,8 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body);
     // saved campground.
     await campground.save();
+    // adding flash messages
+    req.flash('success', 'successfully created new campground.');
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 // hitting the route for getting the campground by its id that is assigned by mongodb.
@@ -52,7 +55,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
 }));
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
 router.get('/:id/edit', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id)
+    const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/edit', { campground });
 }))
 // hitting the route to update the details that are edited by the edititing route.
@@ -60,6 +63,7 @@ router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     // updating the campground details.
     const campground = await Campground.findByIdAndUpdate(id, req.body);
+    req.flash('success', 'successfully edited campground.');
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 // hitting the route to delete the campground.

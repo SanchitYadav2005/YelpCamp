@@ -5,6 +5,7 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
 
 const campground = require('./routes/campground');
 const review = require('./routes/review');
@@ -28,12 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// using the routes.
-app.use('/campgrounds', campground);
-app.use('/campgrounds/:id/reviews', review);
-
-// configuring the session >
-
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret',
     resave: false,
@@ -44,8 +39,24 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
-
 app.use(session(sessionConfig))
+app.use(flash())
+
+// adding middleware to flash messages.
+app.use((req,res,next)=>{
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next()
+})
+// using the routes.
+app.use('/campgrounds', campground);
+app.use('/campgrounds/:id/reviews', review);
+
+// configuring the session >
+
+
+
+
 
 app.get('/', (req, res) => {
     res.render('home')

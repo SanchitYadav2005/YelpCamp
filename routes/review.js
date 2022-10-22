@@ -6,6 +6,7 @@ const {reviewSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 
+
 // did same thing for validating reviews as to validating campground.
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
@@ -28,12 +29,14 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     await review.save();
     // saving the campground.
     await campground.save();
+    req.flash('success', 'successfully created new reviews.');
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 router.delete('/:reviewId', catchAsync(async(req,res)=>{
     const {id, reviewId} = req.params;
     await Campground.findByIdAndUpdate(id, {$pull: {review: reviewId}})
     await Review.findByIdAndDelete(reviewId);
+    req.flash('success', 'successfully deleted review.');
     res.redirect(`/campgrounds/${id}`);
 }));
 
