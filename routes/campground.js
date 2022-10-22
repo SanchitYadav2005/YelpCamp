@@ -50,12 +50,20 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
 router.get('/:id', catchAsync(async (req, res,) => {
     // finding the campground by its id.
     //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
-    const campground = await Campground.findById(req.params.id).populate('review')
+    const campground = await Campground.findById(req.params.id).populate('review');
+    if(!campground){
+        req.flash('error', 'campground is not find.');
+        return res.redirect('/campgrounds');
+    }
     res.render('campgrounds/show', { campground });
 }));
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
+    if(!campground){
+        req.flash('error', 'campground is not find.');
+        return res.redirect('/campgrounds');
+    }
     res.render('campgrounds/edit', { campground });
 }))
 // hitting the route to update the details that are edited by the edititing route.
@@ -71,6 +79,7 @@ router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     // deleting the campground.
     await Campground.findByIdAndDelete(id);
+    req.flash('success', 'successfully deleted campground.')
     res.redirect('/campgrounds');
 }));
 
