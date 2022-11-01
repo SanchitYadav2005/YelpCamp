@@ -6,8 +6,9 @@ const session = require('express-session');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
-const campground = require('./routes/campground');
-const review = require('./routes/review');
+const usersRoute = require('./routes/users');
+const campgroundRoute = require('./routes/campground');
+const reviewRoute = require('./routes/review');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
@@ -60,7 +61,7 @@ app.use((req,res,next)=>{
 
 // passport. initialize() is a middle-ware that initialises Passport
 app.use(passport.initialize());
-app.use(passport.session);
+app.use(passport.session());
 // use static authenticate method of model in LocalStrategy
 passport.use(new LocalStrategy(User.authenticate())) // authenticate Generates a function that is used in Passport's LocalStrategy.
 // use static serialize and deserialize of model for passport session support
@@ -69,16 +70,17 @@ passport.deserializeUser(User.deserializeUser());
 
 // testing route.
 
-app.get('/fakeuser', async (req,res)=>{
-    const user = new User({email:'sanchit@gmail.com', username: 'sanchit'}) // passport automaticlly defines usename for us.
-    const newUser = await User.register(user, 'chicken');
-    res.send(newUser);
-})
+// app.get('/fakeuser', async (req,res)=>{
+//     const user = new User({email:'sanchit@gmail.com', username: 'sanchit'}) // passport automaticlly defines usename for us.
+//     const newUser = await User.register(user, 'chicken');
+//     res.send(newUser);
+// })
 
 
 // using the routes.
-app.use('/campgrounds', campground);
-app.use('/campgrounds/:id/reviews', review);
+app.use('/', usersRoute);
+app.use('/campgrounds', campgroundRoute);
+app.use('/campgrounds/:id/reviews', reviewRoute);
 
 
 app.get('/', (req, res) => {
