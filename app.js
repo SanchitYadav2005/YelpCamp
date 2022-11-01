@@ -6,9 +6,11 @@ const session = require('express-session');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
-
 const campground = require('./routes/campground');
 const review = require('./routes/review');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
@@ -39,31 +41,49 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
+// configuring the session >
 app.use(session(sessionConfig))
 app.use(flash())
-
 // adding middleware to flash messages.
 app.use((req,res,next)=>{
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next()
 })
+
+// Configure Passport/Passport-Local
+// You should configure Passport/Passport-Local as described in the Passport Guide.
+
+// Passport-Local Mongoose supports this setup by implementing a LocalStrategy and serializeUser/deserializeUser functions.
+
+// you should always implement these line of code after you use the session and flash.
+
+// passport. initialize() is a middle-ware that initialises Passport
+app.use(passport.initialize());
+app.use(passport.session);
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate())) // authenticate Generates a function that is used in Passport's LocalStrategy.
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// testing route.
+
+app.get('/fakeuser', async (req,res)=>{
+    const user = new User({email:'sanchit@gmail.com', username: 'sanchit'}) // passport automaticlly defines usename for us.
+    const newUser = await User.register(user, 'chicken');
+    res.send(newUser);
+})
+
+
 // using the routes.
 app.use('/campgrounds', campground);
 app.use('/campgrounds/:id/reviews', review);
-
-// configuring the session >
-
-
-
 
 
 app.get('/', (req, res) => {
     res.render('home')
 });
-
-
-
 
 // universal route for errors.
 app.all('*', (req, res, next) => {
