@@ -4,6 +4,7 @@ const {campgroundSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campgrounds');
+const {isLoggedIn} = require('../isLoggedIn');
 
 
 
@@ -32,7 +33,7 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('campgrounds/index', { campgrounds })
 }));
 // here we are hitting the route for getting a form to add new campground.
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn ,(req, res) => {
     res.render('campgrounds/new');
 })
 
@@ -58,7 +59,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
     res.render('campgrounds/show', { campground });
 }));
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     if(!campground){
         req.flash('error', 'campground is not find.');
@@ -67,7 +68,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     res.render('campgrounds/edit', { campground });
 }))
 // hitting the route to update the details that are edited by the edititing route.
-router.put('/:id', validateCampground, catchAsync(async (req, res) => {
+router.put('/:id', validateCampground, isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // updating the campground details.
     const campground = await Campground.findByIdAndUpdate(id, req.body);
@@ -75,7 +76,7 @@ router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 // hitting the route to delete the campground.
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // deleting the campground.
     await Campground.findByIdAndDelete(id);
