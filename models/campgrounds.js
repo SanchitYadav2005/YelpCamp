@@ -8,6 +8,10 @@ const CampgroundSchem = new Schema({
     image:String,
     description: String,
     location: String,
+    author:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     // refrenceing campground model to review model to attach every review to its campgorund and user.
     review: [
         {

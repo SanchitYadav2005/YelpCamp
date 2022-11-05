@@ -41,6 +41,7 @@ router.get('/new', isLoggedIn ,(req, res) => {
 router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     // created new campground using the Campground schema and the details that we get from post request are stored in requests body =>> req.body
     const campground = new Campground(req.body);
+    campground.author = req.user._id;
     // saved campground.
     await campground.save();
     // adding flash messages
@@ -51,7 +52,7 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
 router.get('/:id', catchAsync(async (req, res,) => {
     // finding the campground by its id.
     //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
-    const campground = await Campground.findById(req.params.id).populate('review');
+    const campground = await Campground.findById(req.params.id).populate('review').populate('author');
     if(!campground){
         req.flash('error', 'campground is not find.');
         return res.redirect('/campgrounds');
