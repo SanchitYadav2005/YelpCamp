@@ -45,14 +45,7 @@ const sessionConfig = {
 // configuring the session >
 app.use(session(sessionConfig))
 app.use(flash())
-// adding middleware to flash messages.
-app.use((req,res,next)=>{
-    console.log(req.session);
-    res.locals.currentUser = req.user;
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
-    next()
-})
+
 
 // Configure Passport/Passport-Local
 // You should configure Passport/Passport-Local as described in the Passport Guide.
@@ -69,6 +62,15 @@ passport.use(new LocalStrategy(User.authenticate())) // authenticate Generates a
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+// adding middleware to flash messages.
+app.use((req,res,next)=>{
+    console.log(req.session);
+    console.log(req.user)
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next()
+})
 
 // testing route.
 
