@@ -5,7 +5,7 @@ const Review = require('../models/reviews');
 const {reviewSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
-const {isLoggedIn} = require('../isLoggedIn');
+const {isLoggedIn} = require('../middleware');
 
 
 // did same thing for validating reviews as to validating campground.

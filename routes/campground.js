@@ -1,28 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const {campgroundSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campgrounds');
-const {isLoggedIn} = require('../isLoggedIn');
+const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
 
-
-
-
-
-
-const validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        // error.details tells little more about the error and we maped over it to find the message, with the help of join() function we joined all other info about the error using (,)
-        const msg = error.details.map(el => el.message).join(',')
-        // we throws the error using ExpressError class that we creadte in utls folder. Where we decided the template the how the error is going to be display.
-        throw new ExpressError(msg, 400)
-    } else {
-        // we are calling the next route to be ran if there is no error.
-        next();
-    }
-}
 
 
 // route for showing all the campground list and their location and description.
@@ -38,7 +19,7 @@ router.get('/new', isLoggedIn ,(req, res) => {
 })
 
 // hitting the route for getting the values from the new form that we send previously
-router.post('/', validateCampground, catchAsync(async (req, res, next) => {
+router.post('/',isLoggedIn,validateCampground, catchAsync(async (req, res, next) => {
     // created new campground using the Campground schema and the details that we get from post request are stored in requests body =>> req.body
     const campground = new Campground(req.body);
     campground.author = req.user._id;
@@ -60,7 +41,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
     res.render('campgrounds/show', { campground });
 }));
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isAuthor, isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     if(!campground){
         req.flash('error', 'campground is not find.');
@@ -69,7 +50,7 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     res.render('campgrounds/edit', { campground });
 }))
 // hitting the route to update the details that are edited by the edititing route.
-router.put('/:id', validateCampground, isLoggedIn, catchAsync(async (req, res) => {
+router.put('/:id', isAuthor,validateCampground, isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // updating the campground details.
     const campground = await Campground.findByIdAndUpdate(id, req.body);
@@ -77,7 +58,7 @@ router.put('/:id', validateCampground, isLoggedIn, catchAsync(async (req, res) =
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 // hitting the route to delete the campground.
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isAuthor,isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // deleting the campground.
     await Campground.findByIdAndDelete(id);
