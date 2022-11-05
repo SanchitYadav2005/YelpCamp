@@ -16,9 +16,14 @@
                     <li class="list-group-item text-muted">
                         <%= campground.location%>
                     </li>
-                    <li class="list-group-item">Submited By -<%= campground.author.username%></li>
+                    <% if(!campground.author){ %>
+                        <li class="list-group-item">Submited By - unknown</li>
+                    <% } else{ %>  
+                        <li class="list-group-item">Submited By -<%= campground.author.username%></li>
+                    
                     <li class="list-group-item">₹<%= campground.price%>/night</li>
                 </ul>
+                <% if(currentUser && campground.author.equals(currentUser._id)){%> 
                 <div class="card-body">
                     <a class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
                     <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
@@ -26,6 +31,8 @@
                     </form>
                     <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
                 </div>
+                <% } %> 
+                <% } %> 
                 <div class="card-footer text-muted">
                     2 days ago
                 </div>
