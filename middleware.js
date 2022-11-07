@@ -1,6 +1,7 @@
-const { campgroundSchema} = require('./schemas');
+const { campgroundSchema, reviewSchema} = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 const Campground = require('./models/campgrounds');
+const Review = require('./models/reviews');
 
 module.exports.isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
@@ -26,12 +27,23 @@ module.exports.validateCampground = (req, res, next) => {
     }
 }
 
-module.exports.isAuthor = async(req, res, next) =>{
-    const {id} = req.params;
-    const campground = await Campground.findById(id);
-    if(!campground.author.equals(req.user._id)){
-        req.flash('error', 'You do not have permission!');
-        return res.redirect(`/campgrounds/${campground._id}`)
+// module.exports.isAuthor = async(req, res, next) =>{
+//     const {id} = req.params;
+//     const campground = await Campground.findById(id);
+//     if(!campground.author.equals(req.user._id)){
+//         req.flash('error', 'You do not have permission!');
+//         return res.redirect(`/campgrounds/${campground._id}`)
+//     }
+//     next();
+// }
+
+// did same thing for validating reviews as to validating campground.
+module.exports.validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
     }
-    next();
 }

@@ -2,22 +2,11 @@ const express = require('express');
 const router = express.Router({mergeParams:true});
 const Campground = require('../models/campgrounds');
 const Review = require('../models/reviews');
-const {reviewSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
-const {isLoggedIn} = require('../middleware');
+const {isLoggedIn, validateReview} = require('../middleware');
 
 
-// did same thing for validating reviews as to validating campground.
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+
 
 // route for adding the reviews to the campground
 router.post('/', validateReview, isLoggedIn, catchAsync(async (req, res) => {

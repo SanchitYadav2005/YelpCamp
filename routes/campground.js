@@ -42,7 +42,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
     res.render('campgrounds/show', { campground });
 }));
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
-router.get('/:id/edit', isAuthor, isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     if(!campground){
         req.flash('error', 'campground is not find.');
@@ -51,7 +51,7 @@ router.get('/:id/edit', isAuthor, isLoggedIn, catchAsync(async (req, res) => {
     res.render('campgrounds/edit', { campground });
 }))
 // hitting the route to update the details that are edited by the edititing route.
-router.put('/:id', isAuthor,validateCampground, isLoggedIn, catchAsync(async (req, res) => {
+router.put('/:id',validateCampground, isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // updating the campground details.
     const campground = await Campground.findByIdAndUpdate(id, req.body);
@@ -59,7 +59,7 @@ router.put('/:id', isAuthor,validateCampground, isLoggedIn, catchAsync(async (re
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 // hitting the route to delete the campground.
-router.delete('/:id', isAuthor,isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id',isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     // deleting the campground.
     await Campground.findByIdAndDelete(id);
