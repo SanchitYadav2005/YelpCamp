@@ -36,7 +36,12 @@ router.get('/:id', catchAsync(async (req, res,) => {
     const {id} = req.params;
     // finding the campground by its id.
     //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
-    const campground = await Campground.findById(id).populate('review').populate('author');
+    const campground = await Campground.findById(id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     if(!campground){
         req.flash('error', 'campground is not find.');
         return res.redirect('/campgrounds');
