@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
     body: String, // body represents review text.
-    rating: Number
+    rating: Number,
+    author: {
+        types: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 module.exports = mongoose.model("Review", reviewSchema);
