@@ -5,6 +5,7 @@ const Campground = require('../models/campgrounds');
 const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
 const { Passport } = require("passport");
 const passport = require("passport");
+const { populate } = require("../models/campgrounds");
 
 
 
@@ -37,7 +38,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
     // finding the campground by its id.
     //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
     const campground = await Campground.findById(id).populate({
-        path: 'reviews',
+        path: 'review',
         populate: {
             path: 'author'
         }
