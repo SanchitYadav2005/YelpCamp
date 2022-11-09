@@ -13,6 +13,7 @@ router.post('/', validateReview, isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     // creting new review.
     const review = new Review(req.body.review);
+    // we are defining the author to be the current user who created the review.
     review.author = req.user._id;
     // pushing it in the campground schema.
     campground.review.push(review)

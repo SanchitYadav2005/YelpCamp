@@ -63,14 +63,16 @@
                         <h5 class="card-title">
                             Rating:- <%= reviews.rating%>
                         </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">By <%= reviews.author.username%></h6>
+                        <h6 class="card-subtitle mb-2 text-muted">By <%=reviews.author.username %> </h6>
                         <p class="card-text">
                             Review:- <%= reviews.body%>
                         </p>
+                        <% if(reviews.author._id === currentUser)  %> 
                         <form action="/campgrounds/<%= campground._id %>/reviews/<%= reviews._id %>?_method=DELETE  "
                             method="post">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
+                        <% } %> 
                     </div>
                 </div>
                 <% } %>

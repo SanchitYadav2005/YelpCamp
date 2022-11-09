@@ -3,11 +3,6 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const Campground = require('../models/campgrounds');
 const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
-const { Passport } = require("passport");
-const passport = require("passport");
-const { populate } = require("../models/campgrounds");
-
-
 
 // route for showing all the campground list and their location and description.
 router.get('/', catchAsync(async (req, res) => {
@@ -25,6 +20,7 @@ router.get('/new', isLoggedIn ,(req, res) => {
 router.post('/',isLoggedIn,validateCampground, catchAsync(async (req, res, next) => {
     // created new campground using the Campground schema and the details that we get from post request are stored in requests body =>> req.body
     const campground = new Campground(req.body);
+    // we are defining author to be the current user who created the campground.
     campground.author = req.user._id;
     // saved campground.
     await campground.save();
@@ -37,6 +33,7 @@ router.get('/:id', catchAsync(async (req, res,) => {
     const {id} = req.params;
     // finding the campground by its id.
     //Mongoose has a more powerful alternative called populate(), which lets you reference documents in other collections.
+    // used nested populate to populate author on review schema.
     const campground = await Campground.findById(id).populate({
         path: 'review',
         populate: {
