@@ -38,6 +38,7 @@
                 </div>
             </div>
         </div>
+        <% if(currentUser) {%> 
         <div class="col-6">
             <h2>Leave a review</h2>
             <form action="/campgrounds/<%= campground._id %>/reviews  " method="POST" novalidate>
@@ -55,6 +56,7 @@
                 </div>
                 <button class="btn btn-success mb-3">Submit</button>
             </form>
+            <% } %> 
             <% for(let reviews of campground.review) { %>
                 <div class="card mb-3">
                     <div class="card-body">
