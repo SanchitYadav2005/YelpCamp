@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const passport = require('passport');
 
 
 // route to get registration form.
@@ -13,8 +14,8 @@ router.post('/register', userController.createUser);
 router.get('/login', userController.getLoginForm);
 
 // route to login user.
-router.post('/login', userController.loginUser);
+router.post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), userController.loginUser);
 // route to logout user.
-router.get('/logout', userController.logoutUser);
+router.get('/logout', userController.logoutUser)
 
 module.exports = router;

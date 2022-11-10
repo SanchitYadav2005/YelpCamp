@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const catchAsync = require('../utils/catchAsync');
-const passport = require('passport');
+
 
 // route to get registration form.
 module.exports.getRegistrationPage = (req, res) => {
@@ -37,7 +37,7 @@ module.exports.getLoginForm = (req, res) => {
     res.render('user/login');
 }
 
-module.exports.loginUser = passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), (req, res) => {
+module.exports.loginUser =  (req, res) => {
     req.flash('success', 'welcome back!');
     const redirectUrl = req.session.returnTo || '/campgrounds';
     delete req.session.returnTo;
