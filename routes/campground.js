@@ -4,20 +4,21 @@ const campgroundController = require('../controllers/campgroundController');
 const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
 // Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. It is written on top of busboy for maximum efficiency.
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'}) // dest stands for destination.
+
+
+//Returns an instance of a single route which you can then use to handle HTTP verbs with optional middleware. Use router.route() to avoid duplicate route naming and thus typing errors.
+
+router.route('/')
+    // route for showing all the campground list and their location and description.
+    .get('/', campgroundController.renderIndex);
 
 
 
-// route for showing all the campground list and their location and description.
-router.get('/', campgroundController.renderIndex);
+router
 
 
 // hitting the route for getting the values from the new form that we send previously
-// router.post('/',isLoggedIn,validateCampground, campgroundController.createNewCampground);
-router.post('/', upload.single('image', (req,res)=>{
-    console.log(req.body);
-    console.log(req.file)
-}))
+router.post('/',isLoggedIn,validateCampground, campgroundController.createNewCampground);
 // here we are hitting the route for getting a form to add new campground.
 router.get('/new', isLoggedIn , campgroundController.newCampground);
 // hitting the route for getting the campground by its id that is assigned by mongodb.
