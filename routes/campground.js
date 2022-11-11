@@ -4,7 +4,7 @@ const campgroundController = require('../controllers/campgroundController');
 const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
 // Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. It is written on top of busboy for maximum efficiency.
 const multer = require('multer');
-const upload = multer({dest: 'upload/'}) // dest stands for destination.
+const upload = multer({dest: 'uploads/'}) // dest stands for destination.
 
 
 
