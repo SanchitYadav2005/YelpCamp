@@ -4,17 +4,19 @@ const userController = require('../controllers/userController');
 const passport = require('passport');
 
 
-// route to get registration form.
-router.get('/register', userController.getRegistrationPage);
+router.route('/register')
+    // route to get registration form.
+    .get(userController.getRegistrationPage)
+    // route to create user.
+    .post(userController.createUser)
 
-// route to create user.
-router.post('/register', userController.createUser);
 
-// route to get login form.
-router.get('/login', userController.getLoginForm);
+router.route('login')
+    // route to get login form.
+    .get(userController.getLoginForm)
+    // route to login user.
+    .post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), userController.loginUser)
 
-// route to login user.
-router.post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), userController.loginUser);
 // route to logout user.
 router.get('/logout', userController.logoutUser)
 
