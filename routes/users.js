@@ -15,7 +15,7 @@ router.route('login')
     // route to get login form.
     .get(userController.getLoginForm)
     // route to login user.
-    .post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), userController.loginUser)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo:true }), userController.loginUser)
 
 // route to logout user.
 router.get('/logout', userController.logoutUser)
