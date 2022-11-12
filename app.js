@@ -1,3 +1,4 @@
+// wiill learn about this forward when delploying.
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
