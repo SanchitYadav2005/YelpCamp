@@ -11,7 +11,7 @@ router.route('/register')
     .post(userController.createUser)
 
 
-router.route('login')
+router.route('/login')
     // route to get login form.
     .get(userController.getLoginForm)
     // route to login user.
