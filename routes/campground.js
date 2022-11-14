@@ -27,12 +27,12 @@ router.route('/:id')
     // hitting the route for getting the campground by its id that is assigned by mongodb.
     .get(campgroundController.showCampground)
     // hitting the route to update the details that are edited by the edititing route.
-    .put(isAuthor,validateCampground, isLoggedIn, campgroundController.putEditedCampground)
+    .put(isAuthor,upload.array('image'),validateCampground, isLoggedIn,campgroundController.putEditedCampground)
     // hitting the route to delete the campground.
     .delete(isAuthor,isLoggedIn, campgroundController.deleteCampground)
 
 
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
-router.get('/:id/edit', isAuthor,isLoggedIn, upload.array('image'),campgroundController.editCampground);
+router.get('/:id/edit', isAuthor,isLoggedIn,campgroundController.editCampground);
 
 module.exports = router;
