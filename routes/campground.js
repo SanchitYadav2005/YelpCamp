@@ -16,11 +16,9 @@ router.route('/')
     // route for showing all the campground list and their location and description.
     .get(campgroundController.renderIndex)
     // hitting the route for getting the values from the new form that we send previously
-    // .post(isLoggedIn,validateCampground, campgroundController.createNewCampground)
-    .post(upload.array('image'), (req,res)=>{
-        console.log(req.body, req.files)
-        res.send("it worked");
-    });
+    .post(isLoggedIn,upload.array('image'),validateCampground, campgroundController.createNewCampground)
+    // you need to upload imgages before validation because multer first uploads files and then pase them into req.body and for validating we need images in req.body and req.files.
+    
 
 // here we are hitting the route for getting a form to add new campground.
 router.get('/new', isLoggedIn , campgroundController.newCampground);
