@@ -2,10 +2,27 @@
     <link rel="stylesheet" href="/stylesheets/star.css">
     <div class="row">
         <div class="col-6">
-            <div class="card mb-3">
-                <% for(img of campground.images) {%> 
-                <img src="<%=img.url%>" class="card-img-top" alt="...">
+            
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <% campground.images.forEach((img, i)=>{ %> 
+                  <div class="carousel-item <%= i === 0 ? 'active' : ''%> ">
+                    <img src="<%= img.url %> " class="d-block w-100" alt="...">
+                  </div>
+                  <% }) %> 
+                </div>
+                <% if(campground.images.length > 1) {%> 
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
                 <% } %> 
+              </div>
+                <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">
                         <%= campground.title%>
@@ -21,7 +38,7 @@
                     <% if(!campground.author){ %>
                         <li class="list-group-item">Submited By - unknown</li>
                         <% } else{ %>
-                            <li class="list-group-item">Submited By -<%= campground.author.username%>
+                            <li class="list-group-item">Submited By - <%= campground.author.username%>
                             </li>
 
                             <li class="list-group-item">₹<%= campground.price%>/night</li>
@@ -35,10 +52,10 @@
                         <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
                     </div>
                     <% } %>
-                    <% } %>
-                    <div class="card-footer text-muted">
+                        <% } %>
+                            <div class="card-footer text-muted">
                                 2 days ago
-                    </div>
+                            </div>
             </div>
         </div>
         <% if(currentUser) {%>
@@ -47,7 +64,8 @@
                 <form action="/campgrounds/<%= campground._id %>/reviews" method="POST" novalidate>
                     <fieldset class="starability-basic">
                         <legend>First rating:</legend>
-                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked
+                            aria-label="No rating." />
                         <input type="radio" id="second-rate1" name="review[rating]" value="1" />
                         <label for="second-rate1" title="Terrible">1 star</label>
                         <input type="radio" id="second-rate2" name="review[rating]" value="2" />
@@ -58,7 +76,7 @@
                         <label for="second-rate4" title="Very good">4 stars</label>
                         <input type="radio" id="second-rate5" name="review[rating]" value="5" />
                         <label for="second-rate5" title="Amazing">5 stars</label>
-                      </fieldset>
+                    </fieldset>
                     <div class="mb-3">
                         <label class="form-label" for="review">Review Text</label>
                         <textarea name="review[body]" id=" review" cols="30" rows="3" class="form-control"
