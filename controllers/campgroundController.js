@@ -17,6 +17,8 @@ module.exports.newCampground = (req, res) => {
 module.exports.createNewCampground = catchAsync(async (req, res, next) => {
     // created new campground using the Campground schema and the details that we get from post request are stored in requests body =>> req.body
     const campground = new Campground(req.body);
+    // we defining images to be the images that had been parsed by multer and cloudinary in req.body and req.files.
+    campground.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     // we are defining author to be the current user who created the campground.
     campground.author = req.user._id;
     // saved campground.
