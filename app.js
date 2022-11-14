@@ -2,7 +2,7 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
-console.log(process.env.CLOUDINARY_KEY)
+console.log(process.env.CLOUDINARY_NAME)
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
