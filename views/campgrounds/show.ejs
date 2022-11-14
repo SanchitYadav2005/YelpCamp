@@ -3,7 +3,9 @@
     <div class="row">
         <div class="col-6">
             <div class="card mb-3">
-                <img src="<%= campground.image%>" class="card-img-top" alt="...">
+                <% for(img of campground.images) {%> 
+                <img src="<%=img.url%>" class="card-img-top" alt="...">
+                <% } %> 
                 <div class="card-body">
                     <h5 class="card-title">
                         <%= campground.title%>
@@ -33,10 +35,10 @@
                         <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
                     </div>
                     <% } %>
-                        <% } %>
-                            <div class="card-footer text-muted">
+                    <% } %>
+                    <div class="card-footer text-muted">
                                 2 days ago
-                            </div>
+                    </div>
             </div>
         </div>
         <% if(currentUser) {%>
