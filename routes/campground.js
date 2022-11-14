@@ -33,6 +33,6 @@ router.route('/:id')
 
 
 // hitting the route for editting the campground. And sending edit.ejs form file in the response.
-router.get('/:id/edit', isAuthor, isLoggedIn, campgroundController.editCampground);
+router.get('/:id/edit', isAuthor,isLoggedIn, upload.array('image'),campgroundController.editCampground);
 
 module.exports = router;
