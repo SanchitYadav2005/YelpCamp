@@ -1,5 +1,6 @@
 const Campground = require('../models/campgrounds');
 const catchAsync = require('../utils/catchAsync');
+const {cloudinary} = require('../cloudinary/index');
 
 module.exports.renderIndex = catchAsync(async (req, res) => {
     // finding the campground .find({}) funciton finds all the avliable campgrounds.
@@ -64,12 +65,19 @@ module.exports.editCampground = catchAsync(async (req, res) => {
 
 module.exports.putEditedCampground = catchAsync(async (req, res) => {
     const { id } = req.params;
+    console.log(req.body)
     // updating the campground details.
     const campground = await Campground.findByIdAndUpdate(id, req.body);
-    console.log(req.body)
+    
     const imgs = campground.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     campground.images.push(...imgs);
-    await campground.save()
+    await campground.save();
+    if(req.body.deleteImages){
+        for(let filename of req.body.deleteImages){
+            cloudinary.uploader.destroy(filename);
+        }
+        await campground.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}})
+    }
     req.flash('success', 'successfully edited campground.');
     res.redirect(`/campgrounds/${campground._id}`)
 });
