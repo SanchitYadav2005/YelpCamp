@@ -2,15 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require('./reviews');
 
+
+const ImagesSchema = new Schema(
+    {
+        url: String,
+        filename: String
+    }
+);
+//In Mongoose, a virtual is a property that is not stored in MongoDB. Virtuals are typically used for computed properties on documents
+ImagesSchema.virtual('thumbnail').get(function(){
+    return this.url.replace('/upload', '/upload/w_200');
+});
 const CampgroundSchem = new Schema({
     title:String,
     price: Number,
-    images:[
-        {
-            url: String,
-            filename: String
-        }
-    ],
+    images:[ImagesSchema],
     description: String,
     location: String,
     author:{
