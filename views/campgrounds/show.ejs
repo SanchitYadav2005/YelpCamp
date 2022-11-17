@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate')%>
     <link rel="stylesheet" href="/stylesheets/star.css">
+    <div class="container ">
     <div class="row">
         <div class="col-6">
             
@@ -22,7 +23,7 @@
                 </button>
                 <% } %> 
               </div>
-                <div class="card mb-3">
+                <div class="card mb-5">
                 <div class="card-body">
                     <h5 class="card-title">
                         <%= campground.title%>
@@ -48,14 +49,17 @@
                         <a class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
                         <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
+                            <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
                         </form>
-                        <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
                     </div>
+                    <% }else{ %>
+                        <a class="card-link btn btn-secondary" href="/campgrounds">Back</a>
+                        <% } %> 
                     <% } %>
-                        <% } %>
-                            <div class="card-footer text-muted">
-                                2 days ago
-                            </div>
+                    
+                    <div class="card-footer text-muted">
+                        2 days ago
+                    </div>
             </div>
         </div>
         <% if(currentUser) {%>
@@ -110,3 +114,4 @@
                         <% } %>
             </div>
     </div>
+</div>
