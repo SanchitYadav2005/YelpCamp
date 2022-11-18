@@ -1,7 +1,19 @@
 body{
-    background-color: #264653;
+    background-color: #2f3e46
 }
 .heading{
     color: #fb8500;
     text-decoration: underline;
+    margin-top: 1em;
 }
+
+.para{
+    margin-top: 2em;
+    font-size: 2em;
+    color: #fefae0;
+}
+
+.css-btn{
+    margin-top: 3em;
+}
+
