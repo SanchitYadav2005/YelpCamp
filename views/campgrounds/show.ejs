@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate')%>
-    <link rel="stylesheet" href="/stylesheets/star.css">
+<link rel="stylesheet" href="/stylesheets/star.css">
     <div class="container ">
     <div class="row">
         <div class="col-6">
@@ -96,9 +96,9 @@
                                 <h5 class="card-title">
                                     <%=reviews.author.username %>
                                 </h5>
-                                <p class="starability-result" data-rating="<%= reviews.rating %> ">
-                                    Rated: <%= reviews.rating %> stars
-                                </p>
+                                <p class="starability-result" data-rating=<%= reviews.rating %> >
+                                    Rated: <%= reviews.rating %> 
+                                  </p>
                                 <p class="card-text">
                                     <%= reviews.body%>
                                 </p>
