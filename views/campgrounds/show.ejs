@@ -100,7 +100,7 @@
                                     Rated: <%= reviews.rating %> stars
                                 </p>
                                 <p class="card-text">
-                                    Review:- <%= reviews.body%>
+                                    <%= reviews.body%>
                                 </p>
                                 <% if(currentUser && reviews.author.equals(currentUser._id)){ %> 
                                 <form
