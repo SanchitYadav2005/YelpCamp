@@ -81,13 +81,7 @@ app.use((req,res,next)=>{
     next()
 })
 
-// testing route.
 
-// app.get('/fakeuser', async (req,res)=>{
-//     const user = new User({email:'sanchit@gmail.com', username: 'sanchit'}) // passport automaticlly defines usename for us.
-//     const newUser = await User.register(user, 'chicken');
-//     res.send(newUser);
-// })
 
 
 // using the routes.
