@@ -20,6 +20,7 @@ const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 
 
+
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
 const db = mongoose.connection;
@@ -41,6 +42,7 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }))
 
+
 const sessionConfig = {
     name: 'session',
     secret: 'thisshouldbeabettersecret',
@@ -56,6 +58,9 @@ const sessionConfig = {
 // configuring the session >
 app.use(session(sessionConfig))
 app.use(flash())
+
+
+
 
 
 // Configure Passport/Passport-Local
