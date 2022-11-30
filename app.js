@@ -17,15 +17,16 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
-const MongoDBStore = require("connect-mongo")(session)
+
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+const MongoDBStore = require("connect-mongo")(session)
 
 // 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
-    // useCreateIndex: true,
+    // // useCreateIndex: true,
     useUnifiedTopology: true,
-    // useFindAndModify: false
+    // // useFindAndModify: false
 });
 
 const db = mongoose.connection;
